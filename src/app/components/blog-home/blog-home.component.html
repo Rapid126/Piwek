@@ -10,5 +10,9 @@
     </div>
   </div>
 
-  <blog [filterText]="filterText"></blog>
+  <blog 
+    [filterText]="filterText"
+    [currentPage]="currentPage"
+    (pageChange)="onPageChange($event)">
+  </blog>
 </div>

@@ -1,30 +1,46 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { DataService } from "../../services/data.service";
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DataService } from '../../services/data.service';
 import { BlogItemComponent } from '../blog-item/blog-item.component';
-import { CommonModule } from "@angular/common";
-import { FilterTextPipe } from "../../pipes/filter-text.pipe";
+import { FilterTextPipe } from '../../pipes/filter-text.pipe';
+import { PaginatePipe } from '../../pipes/paginate.pipe';
+import { PaginationComponent } from '../../shared/pagination/pagination.component';
 
 @Component({
   selector: 'blog',
   standalone: true,
-  imports: [BlogItemComponent, CommonModule, FilterTextPipe],
-  providers: [DataService],
+  imports: [
+    CommonModule, 
+    BlogItemComponent, 
+    FilterTextPipe, 
+    PaginatePipe,       
+    PaginationComponent 
+  ],
   templateUrl: './blog.component.html',
   styleUrl: './blog.component.scss'
 })
 export class BlogComponent implements OnInit {
+  private dataService = inject(DataService);
+  
+  items$: any[] = [];
+
   @Input() filterText: string = '';
-  public items$: any;
+  @Input() currentPage: number = 1; 
+  @Output() pageChange = new EventEmitter<number>();
+  
+  public itemsPerPage = 4;
 
-  constructor(private service: DataService) { }
-
-  ngOnInit() {
+  ngOnInit(): void {
     this.getAll();
   }
 
-  getAll() {
-    this.service.getAll().subscribe(response => {
-      this.items$ = response;
+  getAll(): void {
+    this.dataService.getAll().subscribe(response => {
+        this.items$ = response as any[];
     });
+  }
+
+  onPageChange(page: number): void {
+    this.pageChange.emit(page);
   }
 }
