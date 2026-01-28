@@ -1,0 +1,20 @@
+<div class="container mt-4">
+  <div class="row">
+    @for (item of (items$ | filter:filterText); track item.id) {
+      <div class="col-12 col-md-6 col-lg-3 mb-4">
+        <blog-item 
+          [image]="item.image" 
+          [text]="item.text" 
+          [id]="item.id">
+        </blog-item>
+      </div>
+    } @empty {
+      <div class="col-12">
+        <div class="alert alert-warning text-center" role="alert">
+          Brak wyników spełniających kryteria wyszukiwania: "<strong>{{ filterText }}</strong>"
+        </div>
+      </div>
+    }
+    
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<div class="card p-3 mb-4">
+    <h4>Dodaj nowy post</h4>
+    <div class="mb-2">
+        <label>Link do obrazka (URL):</label>
+        <input type="text" class="form-control" [(ngModel)]="post.image" required>
+    </div>
+    <div class="mb-2">
+        <label>Treść posta:</label>
+        <textarea class="form-control" [(ngModel)]="post.text" rows="3" required></textarea>
+    </div>
+    <button class="btn btn-success" (click)="submitPost()">Opublikuj</button>
+</div>

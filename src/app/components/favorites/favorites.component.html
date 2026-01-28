@@ -1,0 +1,22 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Twoje ulubione posty</h2>
+
+  <div class="row" *ngIf="favoritePosts.length > 0; else noFavorites">
+    
+    <div class="col-md-4 mb-4" *ngFor="let post of favoritePosts">
+      <blog-item 
+        [image]="post.image" 
+        [text]="post.text" 
+        [id]="post.id">
+      </blog-item>
+    </div>
+
+  </div>
+
+  <ng-template #noFavorites>
+    <div class="alert alert-info">
+      Nie masz jeszcze żadnych ulubionych postów. 
+      Wróć na stronę główną i kliknij serduszko przy wybranym poście!
+    </div>
+  </ng-template>
+</div>
