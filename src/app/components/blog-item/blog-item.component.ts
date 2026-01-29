@@ -26,6 +26,7 @@ import { DataService } from '../../services/data.service';
 export class BlogItemComponent {
     @Input() image?: string;
     @Input() text?: string;
+    @Input() title?: string; // <--- DODAJ TĘ LINIĘ
     @Input() id?: any; // id jest opcjonalne (undefined), stąd brał się błąd
     @Input() userId?: string;
     @Input() likes: string[] = []; // Tablica lajków z backendu
