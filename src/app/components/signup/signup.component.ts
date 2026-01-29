@@ -1,37 +1,42 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // Warto dodać
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.scss' // <-- Zmiana na SCSS zgodnie z Twoim projektem
+  styleUrl: './signup.component.scss'
 })
 export class SignupComponent {
-  credentials = {
-    name: '',
-    email: '',
-    password: ''
-  };
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) { }
+  // Walidacja: wymagane, format email, długość hasła 6-15
+  signupForm: FormGroup = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]]
+  });
+
+  // Getter ułatwiający dostęp do błędów w HTML
+  get f() { return this.signupForm.controls; }
 
   create() {
-    this.authService.createOrUpdate(this.credentials).subscribe({
-      next: () => {
-        // Po udanej rejestracji przekieruj do logowania
-        this.router.navigate(['/login']);
-      },
+    if (this.signupForm.invalid) {
+      this.signupForm.markAllAsTouched(); // Pokaż błędy jeśli ktoś klika na siłę
+      return;
+    }
+
+    this.authService.createOrUpdate(this.signupForm.value).subscribe({
+      next: () => this.router.navigate(['/login']),
       error: (err) => {
         console.error('Błąd rejestracji:', err);
-        alert('Wystąpił błąd podczas rejestracji. Sprawdź konsolę.');
+        alert('Nie udało się utworzyć konta. Spróbuj inny email.');
       }
     });
   }

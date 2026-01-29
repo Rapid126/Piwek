@@ -1,23 +1,42 @@
-<section class="container mt-5">
-  <h2>Rejestracja</h2>
-  <form autocomplete="off">
-    <div class="mb-3">
-      <label class="form-label">Email <span class="text-danger">*</span></label>
-      <input type="email" class="form-control" [(ngModel)]="credentials.email"
-             name="email" placeholder="Wpisz email">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Hasło <span class="text-danger">*</span></label>
-      <input type="password" class="form-control" [(ngModel)]="credentials.password"
-             name="password" placeholder="Wpisz hasło (5-15 znaków)">
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Imię <span class="text-danger">*</span></label>
-      <input type="text" class="form-control" [(ngModel)]="credentials.name"
-             name="name" placeholder="Wpisz imię">
-    </div>
-    <button (click)="create()" type="button" class="btn btn-primary">
-      Sign Up
-    </button>
-  </form>
+<section class="container mt-5 d-flex justify-content-center">
+  <div class="card shadow-sm p-4" style="width: 100%; max-width: 450px;">
+    <h2 class="text-center mb-4">Rejestracja</h2>
+    
+    <form [formGroup]="signupForm" (ngSubmit)="create()" autocomplete="off">
+      
+      <div class="mb-3">
+        <label class="form-label">Imię <span class="text-danger">*</span></label>
+        <input type="text" formControlName="name" class="form-control" placeholder="Twoje imię"
+               [ngClass]="{ 'is-invalid': f['name'].touched && f['name'].errors }">
+        <div class="invalid-feedback" *ngIf="f['name'].errors?.['required']">Imię jest wymagane.</div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email <span class="text-danger">*</span></label>
+        <input type="email" formControlName="email" class="form-control" placeholder="twoj@email.pl"
+               [ngClass]="{ 'is-invalid': f['email'].touched && f['email'].errors }">
+        <div class="invalid-feedback">
+          <span *ngIf="f['email'].errors?.['required']">Email jest wymagany.</span>
+          <span *ngIf="f['email'].errors?.['email']">Wprowadź poprawny format adresu email.</span>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Hasło <span class="text-danger">*</span></label>
+        <input type="password" formControlName="password" class="form-control" placeholder="Minimum 6 znaków"
+               [ngClass]="{ 'is-invalid': f['password'].touched && f['password'].errors }">
+        <div class="invalid-feedback">
+          <span *ngIf="f['password'].errors?.['required']">Hasło jest wymagane.</span>
+          <span *ngIf="f['password'].errors?.['minlength']">Hasło musi mieć co najmniej 6 znaków.</span>
+        </div>
+      </div>
+
+      <button [disabled]="signupForm.invalid" type="submit" class="btn btn-primary w-100 mt-2">
+        Sign Up
+      </button>
+      
+      <p class="text-center mt-3 small">
+      </p>
+    </form>
+  </div>
 </section>

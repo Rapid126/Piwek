@@ -1,28 +1,62 @@
 <div class="container mt-5">
-  <div class="card shadow p-4">
-    <h2>➕ Dodaj nowy wpis</h2>
+  <div class="card shadow p-4 mx-auto" style="max-width: 800px;">
+    <h2 class="mb-3">➕ Dodaj nowy wpis</h2>
     <hr>
-    <form (ngSubmit)="savePost()" #postForm="ngForm">
+    
+    <form [formGroup]="postForm" (ngSubmit)="savePost()">
       
       <div class="mb-3">
-        <label class="form-label">Tytuł posta</label>
-        <input type="text" [(ngModel)]="post.title" name="title" class="form-control" required placeholder="Wpisz tytuł...">
+        <label class="form-label fw-bold">Tytuł posta <span class="text-danger">*</span></label>
+        <input type="text" 
+               formControlName="title" 
+               class="form-control" 
+               placeholder="Wpisz tytuł..."
+               [ngClass]="{ 'is-invalid': f['title'].touched && f['title'].errors }">
+        
+        <div class="invalid-feedback" *ngIf="f['title'].errors?.['required']">
+          Tytuł jest wymagany.
+        </div>
+        <div class="invalid-feedback" *ngIf="f['title'].errors?.['minlength']">
+          Tytuł musi mieć co najmniej 3 znaki.
+        </div>
       </div>
       
       <div class="mb-3">
-        <label class="form-label">URL Obrazka</label>
-        <input type="text" [(ngModel)]="post.image" name="image" class="form-control" placeholder="https://link-do-zdjecia.jpg">
+        <label class="form-label fw-bold">URL Obrazka</label>
+        <input type="text" 
+               formControlName="image" 
+               class="form-control" 
+               placeholder="https://link-do-zdjecia.jpg">
+        <div class="form-text text-muted">Pole opcjonalne.</div>
       </div>
 
       <div class="mb-3">
-        <label class="form-label">Treść</label>
-        <textarea [(ngModel)]="post.text" name="text" class="form-control" rows="5" required placeholder="O czym chcesz napisać?"></textarea>
+        <label class="form-label fw-bold">Treść <span class="text-danger">*</span></label>
+        <textarea formControlName="text" 
+                  class="form-control" 
+                  rows="5" 
+                  placeholder="O czym chcesz napisać?"
+                  [ngClass]="{ 'is-invalid': f['text'].touched && f['text'].errors }"></textarea>
+        
+        <div class="invalid-feedback" *ngIf="f['text'].errors?.['required']">
+          Treść posta nie może być pusta.
+        </div>
+        <div class="invalid-feedback" *ngIf="f['text'].errors?.['minlength']">
+          Treść musi mieć co najmniej 10 znaków.
+        </div>
       </div>
 
-      <div class="d-flex justify-content-between">
-        <button type="button" class="btn btn-secondary" [routerLink]="['/blog']">Anuluj</button>
-        <button type="submit" class="btn btn-success" [disabled]="!postForm.form.valid">Opublikuj Post</button>
+      <div class="d-flex justify-content-between mt-4">
+        <button type="button" class="btn btn-secondary" [routerLink]="['/blog']">
+          Anuluj
+        </button>
+        <button type="submit" 
+                class="btn btn-success" 
+                [disabled]="postForm.invalid">
+          Opublikuj Post
+        </button>
       </div>
+
     </form>
   </div>
 </div>

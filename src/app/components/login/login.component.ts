@@ -1,31 +1,41 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common'; // Warto dodać dla pewności
+import { CommonModule } from '@angular/common';
+// Zamieniamy FormsModule na ReactiveFormsModule
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss' // Upewnij się, że masz tu scss (zgodnie z projektem)
+  styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  credentials = {
-    login: '',
-    password: ''
-  };
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   loginError = false;
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) { }
+  // Definicja zasad walidacji
+  loginForm: FormGroup = this.fb.group({
+    login: ['', [Validators.required, Validators.email]], // Walidacja formatu email
+    password: ['', Validators.required]
+  });
+
+  // Getter dla łatwego dostępu do pól w HTML
+  get f() { return this.loginForm.controls; }
 
   signIn() {
+    if (this.loginForm.invalid) {
+      return;
+    }
+
     this.loginError = false;
-    this.authService.authenticate(this.credentials).subscribe({
+    // Przekazujemy wartości bezpośrednio z formularza
+    this.authService.authenticate(this.loginForm.value).subscribe({
       next: (result) => {
         if (result) {
           this.router.navigate(['/']);

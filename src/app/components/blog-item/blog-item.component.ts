@@ -1,20 +1,20 @@
 import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; // Dodano dla routerLink
+import { RouterModule } from '@angular/router';
 import { BlogItemImageComponent } from "../blog-item-image/blog-item-image.component";
 import { BlogItemTextComponent } from "../blog-item-text/blog-item-text.component";
 import { CommentsSectionComponent } from '../comments-section/comments-section.component';
-import { FavoritesService } from '../../services/favorites.service';
+import { FavoritesService } from '../../services/favorites.service'; // DODANO
 import { RatingComponent } from '../../shared/rating/rating.component';
-import { AuthService } from '../../services/auth.service'; // <--- DODANO
-import { DataService } from '../../services/data.service'; // <--- DODANO
+import { AuthService } from '../../services/auth.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
     selector: 'blog-item',
     standalone: true,
     imports: [
         CommonModule,
-        RouterModule, // <--- DODANO
+        RouterModule,
         BlogItemImageComponent, 
         BlogItemTextComponent, 
         CommentsSectionComponent,
@@ -27,33 +27,34 @@ export class BlogItemComponent {
     @Input() image?: string;
     @Input() text?: string;
     @Input() id?: any;
-    @Input() userId?: string; // <--- DODANO: Przekazane ID autora z bazy
+    @Input() userId?: string;
 
-    private favoritesService = inject(FavoritesService);
-    public authService = inject(AuthService); // <--- DODANO
-    private dataService = inject(DataService); // <--- DODANO
+    private favoritesService = inject(FavoritesService); // DODANO
+    public authService = inject(AuthService);
+    private dataService = inject(DataService);
 
-    // Getter sprawdzający czy zalogowany to autor posta
+    // Sprawdzanie czy zalogowany to autor
     get isAuthor(): boolean {
-    // 1. Pobieramy Twoje ID z serwisu (używając _id z podkreślnikiem!)
-    const currentUserId = this.authService.currentUser?._id;
-    
-    // 2. Pobieramy ID autora posta
-    const postAuthorId = this.userId;
+        const currentUserId = this.authService.currentUser?._id || this.authService.currentUser?.id;
+        return !!this.userId && !!currentUserId && String(this.userId) === String(currentUserId);
+    }
 
-    // Logi dla Ciebie - sprawdź je w konsoli przeglądarki (F12)
-    // console.log('JA:', currentUserId);
-    // console.log('AUTOR POSTA:', postAuthorId);
+    // --- LOGIKA ULUBIONYCH (NAPRAWA BŁĘDU) ---
+    toggleFavorite() {
+        if (this.id) {
+            this.favoritesService.toggleFavorite(String(this.id));
+        }
+    }
 
-    if (!currentUserId || !postAuthorId) return false;
+    get isFavorite(): boolean {
+        return this.id ? this.favoritesService.isFavorite(String(this.id)) : false;
+    }
+    // -----------------------------------------
 
-    // 3. Porównujemy oba ID
-    return String(currentUserId) === String(postAuthorId);
-}
     confirmDelete() {
         if (confirm('Czy na pewno chcesz usunąć ten post?')) {
             this.dataService.deletePost(this.id).subscribe(() => {
-                window.location.reload(); // Odświeżenie po usunięciu
+                window.location.reload();
             });
         }
     }

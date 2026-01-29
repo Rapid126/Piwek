@@ -1,38 +1,48 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { DataService } from '../../services/data.service';
+// Importujemy Reactive Forms
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-post-component',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule], // ReactiveFormsModule tu musi być!
   templateUrl: './add-post-component.component.html',
   styleUrl: './add-post-component.component.scss'
 })
 export class AddPostComponent {
-  // To rozwiązuje błąd: Property 'title' does not exist
-  post = {
-    title: '', 
-    text: '',
-    image: ''
-  };
+  private dataService = inject(DataService);
+  private router = inject(Router);
+  private fb = inject(FormBuilder);
 
-  constructor(private dataService: DataService, private router: Router) {}
+  // Inicjalizacja formularza z walidacją
+  public postForm: FormGroup = this.fb.group({
+    title: ['', [Validators.required, Validators.minLength(3)]],
+    text: ['', [Validators.required, Validators.minLength(10)]],
+    image: [''] // Opcjonalne
+  });
 
-  // To rozwiązuje błąd: Property 'savePost' does not exist
+  // Getter dla łatwego dostępu do błędów w HTML
+  get f() { return this.postForm.controls; }
+
   savePost() {
-    console.log('--- [DEBUG] Dane wysyłane do serwera: ---', this.post);
+    if (this.postForm.invalid) {
+      this.postForm.markAllAsTouched(); // Podświetl błędy jeśli ktoś klika "na siłę"
+      return;
+    }
 
-    this.dataService.addPost(this.post).subscribe({
+    console.log('--- [DEBUG] Dane wysyłane do serwera: ---', this.postForm.value);
+
+    this.dataService.addPost(this.postForm.value).subscribe({
       next: (result: any) => {
         console.log('Post dodany pomyślnie:', result);
         this.router.navigate(['/blog']);
       },
       error: (err: any) => {
         console.error('Błąd podczas dodawania posta:', err);
-        alert('Nie udało się dodać posta. Sprawdź czy wypełniłeś wszystkie pola.');
+        alert('Nie udało się dodać posta. Upewnij się, że jesteś zalogowany.');
       }
     });
   }
