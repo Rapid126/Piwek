@@ -26,7 +26,15 @@
         }
       </ul>
 
-      <div class="d-flex">
+      <div class="d-flex align-items-center">
+        
+        @if (temperature !== null) {
+          <div class="d-flex align-items-center me-3 border-end pe-3">
+             <i class="fa {{ weatherIcon }} me-2" style="font-size: 1.2rem;"></i>
+             <span class="fw-bold">{{ temperature }}°C</span>
+          </div>
+        }
+
         @if (!authService.isLoggedIn()) {
           <a class="btn btn-outline-primary me-2" [routerLink]="['/login']">Logowanie</a>
           <a class="btn btn-primary" [routerLink]="['/signup']">Rejestracja</a>
@@ -36,6 +44,7 @@
           </button>
         }
       </div>
+      
     </div>
   </div>
 </nav>

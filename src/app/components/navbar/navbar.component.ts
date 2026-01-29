@@ -1,26 +1,50 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common'; // Warto dodać
+import { CommonModule } from '@angular/common';
+import { WeatherService } from '../../services/weather.service'; // <--- Import serwisu
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   imports: [RouterModule, CommonModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss' // <-- Zmiana na SCSS
+  styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
+  
+  public authService = inject(AuthService); // Używamy inject() dla spójności
+  private router = inject(Router);
+  private weatherService = inject(WeatherService);
 
-  constructor(
-    public authService: AuthService,
-    private router: Router
-  ) { }
+  // Zmienne do pogody
+  public temperature: number | null = null;
+  public weatherIcon: string = 'fa-sun-o';
+
+  ngOnInit() {
+    this.weatherService.getWeather().subscribe({
+      next: (data) => {
+        const code = data.current_weather.weathercode;
+        this.temperature = data.current_weather.temperature;
+        this.weatherIcon = this.getIcon(code);
+      },
+      error: (err) => console.error('Błąd pogody:', err)
+    });
+  }
+
+  // Mapowanie kodów API na ikony FontAwesome
+  getIcon(code: number): string {
+    if (code === 0) return 'fa-sun-o text-warning';            // Słońce
+    if (code >= 1 && code <= 3) return 'fa-cloud text-secondary'; // Chmury
+    if (code >= 45 && code <= 48) return 'fa-align-justify text-muted'; // Mgła
+    if (code >= 51 && code <= 67) return 'fa-tint text-primary';  // Deszcz
+    if (code >= 71) return 'fa-snowflake-o text-info';      // Śnieg
+    return 'fa-cloud';
+  }
 
   signOut() {
     this.authService.logout().subscribe({
       next: () => {
-        // Po wylogowaniu wróć na główną
         this.router.navigate(['/']);
       }
     });
