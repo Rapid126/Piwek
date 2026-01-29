@@ -22,7 +22,6 @@ export class BlogHomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      // Konwersja na Number jest kluczowa dla poprawnego działania paginacji
       const pageFromUrl = params['page'] ? Number(params['page']) : 1;
       
       if (!isNaN(pageFromUrl)) {
@@ -32,7 +31,6 @@ export class BlogHomeComponent implements OnInit {
   }
 
   getName($event: string): void {
-    // Resetuj stronę tylko jeśli faktycznie zmienił się tekst filtru
     if (this.filterText !== $event) {
       this.filterText = $event;
       this.resetPage();
@@ -45,6 +43,13 @@ export class BlogHomeComponent implements OnInit {
     }
     this.filterText = '';
     this.resetPage();
+  }
+
+  // NOWA METODA WYWOŁYWANA PRZEZ PRZYCISK
+  sortPosts(): void {
+    if (this.blogComponent) {
+      this.blogComponent.sortByRating();
+    }
   }
 
   onPageChange(page: number): void {

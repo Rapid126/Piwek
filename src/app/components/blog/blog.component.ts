@@ -5,6 +5,7 @@ import { BlogItemComponent } from '../blog-item/blog-item.component';
 import { FilterTextPipe } from '../../pipes/filter-text.pipe';
 import { PaginatePipe } from '../../pipes/paginate.pipe';
 import { PaginationComponent } from '../../shared/pagination/pagination.component';
+import { RatingService } from '../../services/rating.service';
 
 @Component({
   selector: 'blog',
@@ -21,6 +22,7 @@ import { PaginationComponent } from '../../shared/pagination/pagination.componen
 })
 export class BlogComponent implements OnInit {
   private dataService = inject(DataService);
+  private ratingService = inject(RatingService);
   
   items$: any[] = [];
 
@@ -42,5 +44,30 @@ export class BlogComponent implements OnInit {
 
   onPageChange(page: number): void {
     this.pageChange.emit(page);
+  }
+
+  // --- TUTAJ JEST POPRAWKA ---
+  sortByRating(): void {
+    if (this.items$ && this.items$.length > 0) {
+      console.log('Rozpoczynam sortowanie...'); // Debug
+
+      // Tworzymy kopię tablicy używając [...this.items$]
+      // Dzięki temu Angular widzi "nową" tablicę i odświeża widok
+      const sortedItems = [...this.items$].sort((a, b) => {
+        const rateA = this.ratingService.getAverage(a._id);
+        const rateB = this.ratingService.getAverage(b._id);
+        
+        // Debugowanie wartości w konsoli
+        // console.log(`Post: ${a.title} ma ocenę: ${rateA}`);
+        
+        // Sortowanie malejące (wyższa ocena = index 0)
+        return rateB - rateA;
+      });
+
+      this.items$ = sortedItems; // Przypisanie nowej tablicy
+      
+      // Reset paginacji do 1, żeby zobaczyć najlepsze wyniki
+      this.pageChange.emit(1);
+    }
   }
 }

@@ -12,5 +12,9 @@
   <blog-item-image [image]="image"></blog-item-image>
   <blog-item-text [text]="text" [id]="id"></blog-item-text>
 
+  <div class="px-3 pb-2">
+    <app-rating [postId]="id"></app-rating>
+  </div>
+
   <comments-section [postId]="id"></comments-section>
 </div>
