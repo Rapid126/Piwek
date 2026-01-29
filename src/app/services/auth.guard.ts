@@ -8,8 +8,8 @@ export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   if (authService.isLoggedIn()) {
-    return true; // Masz bilet (token), wchodzisz
+    return true; 
   } else {
-    return router.createUrlTree(['/login']); // Nie masz biletu -> idź się zalogować
+    return router.createUrlTree(['/login']); 
   }
 };

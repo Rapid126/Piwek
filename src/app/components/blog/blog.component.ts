@@ -46,27 +46,22 @@ export class BlogComponent implements OnInit {
     this.pageChange.emit(page);
   }
 
-  // --- TUTAJ JEST POPRAWKA ---
   sortByRating(): void {
     if (this.items$ && this.items$.length > 0) {
-      console.log('Rozpoczynam sortowanie...'); // Debug
+      console.log('Rozpoczynam sortowanie...'); 
 
-      // Tworzymy kopię tablicy używając [...this.items$]
-      // Dzięki temu Angular widzi "nową" tablicę i odświeża widok
+
       const sortedItems = [...this.items$].sort((a, b) => {
         const rateA = this.ratingService.getAverage(a._id);
         const rateB = this.ratingService.getAverage(b._id);
         
-        // Debugowanie wartości w konsoli
-        // console.log(`Post: ${a.title} ma ocenę: ${rateA}`);
-        
-        // Sortowanie malejące (wyższa ocena = index 0)
+
         return rateB - rateA;
       });
 
-      this.items$ = sortedItems; // Przypisanie nowej tablicy
+      this.items$ = sortedItems; 
       
-      // Reset paginacji do 1, żeby zobaczyć najlepsze wyniki
+  
       this.pageChange.emit(1);
     }
   }

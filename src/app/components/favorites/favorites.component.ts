@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataService } from '../../services/data.service'; // Upewnij się co do ścieżki
+import { DataService } from '../../services/data.service'; 
 import { FavoritesService } from '../../services/favorites.service';
-import { BlogItemComponent } from '../blog-item/blog-item.component'; // Upewnij się co do ścieżki
+import { BlogItemComponent } from '../blog-item/blog-item.component'; 
 
 @Component({
   selector: 'app-favorites',
@@ -19,10 +19,8 @@ export class FavoritesComponent implements OnInit {
   public favoritePosts: any[] = [];
 
   ngOnInit(): void {
-    // 1. Pobieramy wszystkie posty (zakładam, że getAll zwraca Observable)
     this.dataService.getAll().subscribe((posts: any[]) => {
       
-      // 2. Filtrujemy listę, zostawiając tylko te, które są ulubione
       this.favoritePosts = posts.filter(post => 
         this.favoritesService.isFavorite(String(post.id))
       );

@@ -28,11 +28,11 @@ export const routes: Routes = [
     loadComponent: () => import('./components/add-post-component/add-post-component.component').then(m => m.AddPostComponent),
     canActivate: [authGuard]
   },
-  // --- DODANA TRASA DLA EDYCJI ---
+
   {
-    path: 'edit-post/:id', // Parametr :id pozwala przekazać numer posta do edycji
+    path: 'edit-post/:id', 
     loadComponent: () => import('./components/edit-post/edit-post.component').then(m => m.EditPostComponent),
-    canActivate: [authGuard] // Tylko zalogowani mogą edytować
+    canActivate: [authGuard] 
   },
   {
     path: 'favorites',

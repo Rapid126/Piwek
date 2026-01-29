@@ -17,7 +17,6 @@ export class BlogGalleryComponent implements OnInit {
 
   ngOnInit() {
 
-  // Musimy użyć .subscribe(), aby "rozpakować" dane z Observable
   this.service.getAll().subscribe((posts: any) => {
     if (posts) {
       this.images = posts.map((p: any) => p.image);

@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-// Zamieniamy FormsModule na ReactiveFormsModule
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -19,13 +18,11 @@ export class LoginComponent {
 
   loginError = false;
 
-  // Definicja zasad walidacji
   loginForm: FormGroup = this.fb.group({
-    login: ['', [Validators.required, Validators.email]], // Walidacja formatu email
+    login: ['', [Validators.required, Validators.email]], 
     password: ['', Validators.required]
   });
 
-  // Getter dla łatwego dostępu do pól w HTML
   get f() { return this.loginForm.controls; }
 
   signIn() {
@@ -34,7 +31,6 @@ export class LoginComponent {
     }
 
     this.loginError = false;
-    // Przekazujemy wartości bezpośrednio z formularza
     this.authService.authenticate(this.loginForm.value).subscribe({
       next: (result) => {
         if (result) {

@@ -3,18 +3,15 @@ import { inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  // 1. Pobieramy identyfikator platformy (Browser vs Server)
   const platformId = inject(PLATFORM_ID);
   
   let token = null;
 
-  // 2. Sprawdzamy, czy jesteśmy w przeglądarce. Tylko wtedy dotykamy localStorage.
   if (isPlatformBrowser(platformId)) {
     token = localStorage.getItem('token');
   }
 
   if (token) {
-    // KLUCZOWE: Używamy 'Authorization', nie 'x-auth-token'
     const authReq = req.clone({
       setHeaders: {
         Authorization: `Bearer ${token}`

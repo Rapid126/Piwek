@@ -9,7 +9,7 @@ import { DOCUMENT } from '@angular/common';
   providedIn: 'root'
 })
 export class AuthService {
-  private url = 'http://localhost:3000/api'; // Adres Twojego API
+  private url = 'http://localhost:3000/api'; 
 
   constructor(
     private http: HttpClient,
@@ -39,7 +39,6 @@ export class AuthService {
 
   logout() {
     const localStorage = this.document.defaultView?.localStorage;
-    // Wylogowanie usuwa token z localStorage i (opcjonalnie) powiadamia backend
     return this.http.delete(this.url + '/user/logout/' + this.currentUser?.userId)
       .pipe(
         map(() => {
@@ -55,7 +54,6 @@ export class AuthService {
     if (!token) {
       return false;
     }
-    // Sprawdza czy token nie wygasł
     return !jwtHelper.isTokenExpired(token);
   }
 
@@ -64,7 +62,6 @@ export class AuthService {
     if (!token) {
       return null;
     }
-    // Dekoduje token, żeby wyciągnąć dane użytkownika (np. userId, login)
     return new JwtHelperService().decodeToken(token);
   }
 

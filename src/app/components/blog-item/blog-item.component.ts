@@ -26,29 +26,29 @@ import { DataService } from '../../services/data.service';
 export class BlogItemComponent {
     @Input() image?: string;
     @Input() text?: string;
-    @Input() title?: string; // <--- DODAJ TĘ LINIĘ
-    @Input() id?: any; // id jest opcjonalne (undefined), stąd brał się błąd
+    @Input() title?: string; 
+    @Input() id?: any; 
     @Input() userId?: string;
-    @Input() likes: string[] = []; // Tablica lajków z backendu
+    @Input() likes: string[] = []; 
 
     private favoritesService = inject(FavoritesService);
     public authService = inject(AuthService);
     private dataService = inject(DataService);
 
-    // Sprawdzanie czy zalogowany to autor
+   
     get isAuthor(): boolean {
         const currentUserId = this.authService.currentUser?._id || this.authService.currentUser?.id;
         return !!this.userId && !!currentUserId && String(this.userId) === String(currentUserId);
     }
 
-    // --- SYSTEM POLUBIEŃ (Backend) ---
+   
     onLikeClick() {
         if (!this.authService.isLoggedIn()) {
             alert('Musisz być zalogowany, aby polubić ten post!');
             return;
         }
 
-        // Sprawdzamy czy ID istnieje
+
         if (this.id) {
             this.dataService.toggleLike(String(this.id)).subscribe({
                 next: (updatedPost: any) => {
@@ -68,7 +68,7 @@ export class BlogItemComponent {
         return this.likes ? this.likes.length : 0;
     }
 
-    // --- SYSTEM ULUBIONYCH (Lokalne - Serduszko) ---
+
     toggleFavorite() {
         if (this.id) {
             this.favoritesService.toggleFavorite(String(this.id));
@@ -79,11 +79,11 @@ export class BlogItemComponent {
         return this.id ? this.favoritesService.isFavorite(String(this.id)) : false;
     }
 
-    // --- USUWANIE (Tutaj był błąd) ---
+  
     confirmDelete() {
-        // Dodajemy sprawdzenie 'if (this.id)', aby wyeliminować undefined
+ 
         if (this.id && confirm('Czy na pewno chcesz usunąć ten post?')) {
-            // Rzutujemy na String(), żeby TypeScript był w 100% pewny typu
+
             this.dataService.deletePost(String(this.id)).subscribe(() => {
                 window.location.reload();
             });

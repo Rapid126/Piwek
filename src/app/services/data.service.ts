@@ -27,18 +27,14 @@ export class DataService {
     return this.http.post(this.url + '/api/post', post);
   }
 
-  // DODANO METODĘ UPDATE
   updatePost(id: string, post: any): Observable<any> {
     return this.http.put(this.url + '/api/post/' + id, post);
   }
 
-  // DODANO METODĘ DELETE
   deletePost(id: string): Observable<any> {
     return this.http.delete(this.url + '/api/post/' + id);
   }
-  // ...
 toggleLike(postId: string): Observable<any> {
-  // Puste body {}, bo ID usera idzie w tokenie
   return this.http.patch(`${this.url}/api/post/like/${postId}`, {});
 }
 // ...

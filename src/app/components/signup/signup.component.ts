@@ -16,19 +16,18 @@ export class SignupComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  // Walidacja: wymagane, format email, długość hasła 6-15
+  
   signupForm: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(15)]]
   });
 
-  // Getter ułatwiający dostęp do błędów w HTML
   get f() { return this.signupForm.controls; }
 
   create() {
     if (this.signupForm.invalid) {
-      this.signupForm.markAllAsTouched(); // Pokaż błędy jeśli ktoś klika na siłę
+      this.signupForm.markAllAsTouched(); 
       return;
     }
 

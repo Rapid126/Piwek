@@ -32,13 +32,12 @@ export class NavbarComponent implements OnInit {
     });
   }
 
-  // Mapowanie kodów API na ikony FontAwesome
   getIcon(code: number): string {
-    if (code === 0) return 'fa-sun-o text-warning';            // Słońce
-    if (code >= 1 && code <= 3) return 'fa-cloud text-secondary'; // Chmury
-    if (code >= 45 && code <= 48) return 'fa-align-justify text-muted'; // Mgła
-    if (code >= 51 && code <= 67) return 'fa-tint text-primary';  // Deszcz
-    if (code >= 71) return 'fa-snowflake-o text-info';      // Śnieg
+    if (code === 0) return 'fa-sun-o text-warning';            
+    if (code >= 1 && code <= 3) return 'fa-cloud text-secondary'; 
+    if (code >= 45 && code <= 48) return 'fa-align-justify text-muted'; 
+    if (code >= 51 && code <= 67) return 'fa-tint text-primary';  
+    if (code >= 71) return 'fa-snowflake-o text-info';      
     return 'fa-cloud';
   }
 

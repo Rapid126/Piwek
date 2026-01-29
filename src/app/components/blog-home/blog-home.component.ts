@@ -1,15 +1,15 @@
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router'; // DODANO DLA ROUTERLINK
+import { RouterModule } from '@angular/router'; 
 import { SearchBarComponent } from "../../shared/search-bar/search-bar.component";
 import { BlogComponent } from "../blog/blog.component";
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service'; // DODANO
+import { AuthService } from '../../services/auth.service'; 
 
 @Component({
   selector: 'app-blog-home',
   standalone: true,
-  imports: [CommonModule, SearchBarComponent, BlogComponent, RouterModule], // DODANO RouterModule
+  imports: [CommonModule, SearchBarComponent, BlogComponent, RouterModule], 
   templateUrl: './blog-home.component.html',
   styleUrl: './blog-home.component.scss'
 })
@@ -19,7 +19,7 @@ export class BlogHomeComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  public authService = inject(AuthService); // DODANO JAKO PUBLIC
+  public authService = inject(AuthService); 
 
   @ViewChild(BlogComponent) blogComponent!: BlogComponent;
 
