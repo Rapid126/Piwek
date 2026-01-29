@@ -1,16 +1,14 @@
 import { Component, inject } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { ThemeService } from './services/theme.service'; // Import serwisu
-import { ThemeToggleComponent } from './shared/theme-toggle/theme-toggle.component'; // Import komponentu przełącznika
+import { RouterOutlet } from '@angular/router';
+import { ThemeService } from './services/theme.service';
+import { NavbarComponent } from './components/navbar/navbar.component'; // <--- 1. NOWY IMPORT
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet, 
-    RouterLink, 
-    RouterLinkActive,
-    ThemeToggleComponent // Dodaj do importów
+    NavbarComponent // <--- 2. DODAJEMY KOMPONENT DO TABLICY
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
@@ -18,6 +16,6 @@ import { ThemeToggleComponent } from './shared/theme-toggle/theme-toggle.compone
 export class AppComponent {
   title = 'blog';
 
-  // Wstrzyknięcie serwisu inicjalizuje go (sprawdza preferencje systemowe/localStorage)
+  // To zostawiamy - inicjalizuje Twój motyw (Ciemny/Jasny) przy starcie
   private themeService = inject(ThemeService);
 }
