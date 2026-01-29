@@ -26,8 +26,8 @@ export class SearchBarComponent implements OnInit {
   }
 
   sendFilter(): void {
-    // Aktualizacja URL
-    this.router.navigate(['/'], {
+    // ZMIANA: Przekierowanie na '/blog' zamiast '/'
+    this.router.navigate(['/blog'], {
       queryParams: {
         name: this.filterText ? this.filterText.toLowerCase() : null
       }
