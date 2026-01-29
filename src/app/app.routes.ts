@@ -24,9 +24,15 @@ export const routes: Routes = [
     loadComponent: () => import('./components/blog-item-details/blog-item-details.component').then(m => m.BlogItemDetailsComponent)
   },
   {
-    path: 'add-post', // NOWA TRASA
+    path: 'add-post',
     loadComponent: () => import('./components/add-post-component/add-post-component.component').then(m => m.AddPostComponent),
     canActivate: [authGuard]
+  },
+  // --- DODANA TRASA DLA EDYCJI ---
+  {
+    path: 'edit-post/:id', // Parametr :id pozwala przekazać numer posta do edycji
+    loadComponent: () => import('./components/edit-post/edit-post.component').then(m => m.EditPostComponent),
+    canActivate: [authGuard] // Tylko zalogowani mogą edytować
   },
   {
     path: 'favorites',

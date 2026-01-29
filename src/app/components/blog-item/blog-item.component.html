@@ -10,6 +10,16 @@
   </div>
 
   <blog-item-image [image]="image"></blog-item-image>
+  
+  <div class="p-2 text-end" *ngIf="isAuthor">
+    <button class="btn btn-sm btn-outline-primary me-2" [routerLink]="['/edit-post', id]">
+      <i class="fa fa-edit"></i> Edytuj
+    </button>
+    <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete()">
+      <i class="fa fa-trash"></i> Usuń
+    </button>
+  </div>
+
   <blog-item-text [text]="text" [id]="id"></blog-item-text>
 
   <div class="px-3 pb-2">
