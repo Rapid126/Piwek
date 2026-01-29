@@ -9,12 +9,13 @@
             [image]="item.image" 
             [text]="item.text" 
             [id]="item._id"
-            [userId]="item.userId"> </blog-item>
+            [userId]="item.userId"
+            [likes]="item.likes"> </blog-item>
         </div>
       } @empty {
         <div class="col-12">
           <div class="alert alert-warning text-center">
-            Brak wyników dla: "<strong>{{ filterText }}</strong>"
+            Brak wyników.
           </div>
         </div>
       }

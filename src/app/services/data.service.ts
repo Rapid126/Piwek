@@ -36,4 +36,10 @@ export class DataService {
   deletePost(id: string): Observable<any> {
     return this.http.delete(this.url + '/api/post/' + id);
   }
+  // ...
+toggleLike(postId: string): Observable<any> {
+  // Puste body {}, bo ID usera idzie w tokenie
+  return this.http.patch(`${this.url}/api/post/like/${postId}`, {});
+}
+// ...
 }

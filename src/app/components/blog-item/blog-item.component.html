@@ -22,6 +22,17 @@
 
   <blog-item-text [text]="text" [id]="id"></blog-item-text>
 
+  <div class="px-3 pb-2 d-flex align-items-center">
+    <button 
+      class="btn btn-sm d-flex align-items-center gap-2" 
+      [ngClass]="isLiked ? 'btn-primary' : 'btn-outline-primary'"
+      (click)="onLikeClick()">
+      <i class="fa fa-thumbs-up"></i>
+      <span class="fw-bold">{{ likesCount }}</span>
+    </button>
+    <small class="ms-2 text-muted" *ngIf="isLiked">Polubiłeś to!</small>
+  </div>
+
   <div class="px-3 pb-2">
     <app-rating [postId]="id"></app-rating>
   </div>
