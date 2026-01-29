@@ -1,12 +1,28 @@
-<div class="card p-3 mb-4">
-    <h4>Dodaj nowy post</h4>
-    <div class="mb-2">
-        <label>Link do obrazka (URL):</label>
-        <input type="text" class="form-control" [(ngModel)]="post.image" required>
-    </div>
-    <div class="mb-2">
-        <label>Treść posta:</label>
-        <textarea class="form-control" [(ngModel)]="post.text" rows="3" required></textarea>
-    </div>
-    <button class="btn btn-success" (click)="submitPost()">Opublikuj</button>
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h2>➕ Dodaj nowy wpis</h2>
+    <hr>
+    <form (ngSubmit)="savePost()" #postForm="ngForm">
+      
+      <div class="mb-3">
+        <label class="form-label">Tytuł posta</label>
+        <input type="text" [(ngModel)]="post.title" name="title" class="form-control" required placeholder="Wpisz tytuł...">
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label">URL Obrazka</label>
+        <input type="text" [(ngModel)]="post.image" name="image" class="form-control" placeholder="https://link-do-zdjecia.jpg">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Treść</label>
+        <textarea [(ngModel)]="post.text" name="text" class="form-control" rows="5" required placeholder="O czym chcesz napisać?"></textarea>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary" [routerLink]="['/blog']">Anuluj</button>
+        <button type="submit" class="btn btn-success" [disabled]="!postForm.form.valid">Opublikuj Post</button>
+      </div>
+    </form>
+  </div>
 </div>

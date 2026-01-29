@@ -16,13 +16,14 @@ export class DataService {
     return this.http.get<any[]>(this.url + '/api/posts').pipe(
       map(posts => posts.map(post => ({
         ...post,
-        id: post._id // Mapowanie _id na id (bez logowania)
+        id: post._id
       })))
     );
   }
 
   getById(id: string): Observable<any> {
-    return this.http.get<any>(this.url + '/api/posts/' + id).pipe(
+    // ZMIANA: ścieżka pojedyncza /api/post/
+    return this.http.get<any>(this.url + '/api/post/' + id).pipe(
       map(post => ({
         ...post,
         id: post._id
@@ -31,6 +32,7 @@ export class DataService {
   }
 
   addPost(post: any): Observable<any> {
-    return this.http.post(this.url + '/api/posts', post);
+    // ZMIANA: ścieżka pojedyncza /api/post
+    return this.http.post(this.url + '/api/post', post);
   }
 }
